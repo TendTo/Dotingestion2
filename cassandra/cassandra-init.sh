@@ -11,7 +11,7 @@ if [[ ! -z "$CASSANDRA_KEYSPACE" && ! -z "$CASSANDRA_MATCH_TABLE"  && $1 = 'cass
       pre_game_duration int,
       start_time bigint,
       start_timestamp timestamp,
-      match_id bigint PRIMARY KEY,
+      match_id bigint,
       match_seq_num bigint,
       tower_status_radiant int,
       tower_status_dire int,
@@ -33,7 +33,9 @@ if [[ ! -z "$CASSANDRA_KEYSPACE" && ! -z "$CASSANDRA_MATCH_TABLE"  && $1 = 'cass
       version text,
       players text,
       picks_bans text,
-    );"
+      PRIMARY KEY(match_id, match_seq_num)
+    )
+    WITH CLUSTERING ORDER BY (match_seq_num DESC);"
   until echo $CQL | cqlsh; do
     echo "cqlsh: Cassandra is unavailable - retry later"
     sleep 2
