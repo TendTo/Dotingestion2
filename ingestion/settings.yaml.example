@@ -1,0 +1,5 @@
+api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+api_endpoint: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
+topic: dota_raw
+match_seq_num: 4976549000
+hystory_endpoint: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/key={}&matches_requested=1
