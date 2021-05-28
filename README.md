@@ -83,10 +83,48 @@
   docker-compose down
   ```
 
+## Quickstart (Kubernetes)
+
+### System requirements
+- [Docker](https://www.docker.com/get-started)
+- [Kubernetes tool, like minikube](https://kubernetes.io/docs/tasks/tools/)
+
+### Steps
+- To run the Elasticsearch container you may need to tweak the *vm.max_map_count* variable. See [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
+- Download [spark-3.1.1-bin-hadoop2.7.tgz](https://www.apache.org/dyn/closer.lua/spark/spark-3.1.1/spark-3.1.1-bin-hadoop2.7.tgz) and place it in the _spark/setup_ directory
+- Download [DataStax Apache Kafka® Connector](https://downloads.datastax.com/#akc) and place it in the _connect-cassandra_ directory
+- Make sure you are in the root directory, with the _all-in-one-deploy.yaml_ file
+- Create an _ingestion/settings.yaml_ file with the following values (see _ingestion/settings.yaml.example_)
+  ```yaml
+  # You need this in order to access the Steam Web API, which is used to fetch basic match data. You can safely use your main account to obtain the API key. You can request an API key here: https://steamcommunity.com/dev/apikey
+  api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  # Steam Web API endpoint. You should not modify this, unless you know what you are doing
+  api_endpoint: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
+  # Kafka topic the producer will send the data to. The kafka streams consumer expects this topic
+  topic: dota_raw
+  # 3 possible settings can be placed here:
+  # - The sequential match id of the first match you want to fetch
+  # - 'cassandra', will fetch the last sequential match id in the cassandra database
+  # - 'steam', will fetch the most recent sequential match id from the "hystory_endpoint"
+  match_seq_num: 4976549000 | 'steam' | 'cassandra'
+  # Steam API Web endpoint used when 'steam' value is placed in "match_seq_num"
+  hystory_endpoint: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/key={}&matches_requested=1
+  ```
+- Build all the Docker containers with the _dotingestion_ tag. Can be done rapidly through the docker-compose file
+- Start:
+  ```bash
+  kubectl apply -f all-in-one-deploy.yaml
+  ```
+- Stop:
+  ```bash
+  kubectl delete -f all-in-one-deploy.yaml
+  ```
+
 ### Basic troubleshooting
 - `docker exec -it <container-name> bash` Get a terminal into the running container
 - `docker system prune` Cleans your system of any stopped containers, images, and volumes
 - `docker-compose build` Rebuilds your containers (e.g. for database schema updates)
+- `kubectl -n default rollout restart deploy` Restart all kubernetes pods
 
 ## Resources
 - [OpenDota](https://www.opendota.com/)
