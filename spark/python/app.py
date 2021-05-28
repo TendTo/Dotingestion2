@@ -1,3 +1,4 @@
+import logging
 from json import loads
 from pyspark import SparkContext
 from pyspark.sql.session import SparkSession
@@ -10,6 +11,7 @@ from pyspark.ml.linalg import Vectors, VectorUDT
 
 # Command to run this application:
 # spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.1,org.elasticsearch:elasticsearch-spark-30_2.12:7.12.1 --master local[*] app.py
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.ERROR)
 
 elastic_host = "elasticsearch"
 elastic_index = "matches"
@@ -97,7 +99,7 @@ df = process_data(df)
 query = df.writeStream \
           .option("checkpointLocation", "./checkpoints") \
           .format("es") \
-          .start(elastic_index)
+          .start(elastic_index + "/_doc")
 
 # Keep running untill terminated
 query.awaitTermination()
