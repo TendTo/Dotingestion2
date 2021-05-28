@@ -22,7 +22,8 @@ with open("settings.yaml", 'r', encoding='utf-8') as f:
 def get_match_seq_num(config: dict):
     if config['match_seq_num'] is None or config['match_seq_num'] == "steam":
         result = requests.get(config['hystory_endpoint'].format(config['api_key'])).json()
-        matches = result['result'].get('matches', None)
+        res = result.get('result', None)
+        matches = res.get('matches', None) if res is not None else None
         if matches:
             return matches[0]['match_seq_num']
     elif config['match_seq_num'] == "cassandra":
@@ -47,17 +48,21 @@ def delivery_report(err, decoded_message):
 # Fetch the data from the Steam Web API and send the response to Kafka, saving only the match_seq_num of the last match
 def confluent_producer():
     global match_seq_num
-    result = requests.get(config['api_endpoint'].format(config['api_key'], match_seq_num))
-    response = result.json()
-    matches = response['result'].get('matches', None)
-    if matches:
-        producer = Producer({'bootstrap.servers': 'kafkaserver:9092', 'message.max.bytes': 1677722})
-        producer.produce("dota_raw", result.text, callback=delivery_report)
-        producer.flush()
-        match_seq_num = matches[-1]['match_seq_num'] + 1
-        logger.info("Flush completed. New match_seq_num: %d", match_seq_num)
-    else:
-        logger.warning("No matches found")
+    try:
+        result = requests.get(config['api_endpoint'].format(config['api_key'], match_seq_num))
+        response = result.json()
+        res = response.get('result', None)
+        matches = res.get('matches', None) if res is not None else None
+        if matches:
+            producer = Producer({'bootstrap.servers': 'kafkaserver:9092', 'message.max.bytes': 1677722})
+            producer.produce("dota_raw", result.text, callback=delivery_report)
+            producer.flush()
+            match_seq_num = matches[-1]['match_seq_num'] + 1
+            logger.info("Flush completed. New match_seq_num: %d", match_seq_num)
+        else:
+            logger.warning("No matches found")
+    except requests.exceptions.ConnectionError:
+        return
 
 
 # Initialize match_seq_num and keep requesting data from the the Steam Web API every 10 seconds
