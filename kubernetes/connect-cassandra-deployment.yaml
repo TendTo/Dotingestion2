@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: connect-cassandra
+  name: connect-cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: connect-cassandra
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: connect-cassandra
+    spec:
+      containers:
+        - image: dotingestion2:kafka-connect-cassandra
+          name: connect-cassandra
+          resources: {}
+      restartPolicy: Always
+status: {}

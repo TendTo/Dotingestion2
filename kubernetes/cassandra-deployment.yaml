@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: cassandra
+  name: cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: cassandra
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: cassandra
+    spec:
+      hostname: cassandra
+      containers:
+        - env:
+            - name: CASSANDRA_BROADCAST_ADDRESS
+              value: cassandra
+            - name: CASSANDRA_KEYSPACE
+              value: dota_ks
+            - name: CASSANDRA_MATCH_TABLE
+              value: matches
+          image: dotingestion2:cassandra
+          name: cassandra
+          ports:
+            - containerPort: 9042
+          resources: {}
+      restartPolicy: Always
+status: {}

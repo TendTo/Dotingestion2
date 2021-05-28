@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: connect-elasticsearch
+  name: connect-elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: connect-elasticsearch
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: connect-elasticsearch
+    spec:
+      containers:
+        - image: dotingestion2:kafka-connect-elasticsearch
+          name: connect-elasticsearch
+          resources: {}
+      restartPolicy: Always
+status: {}

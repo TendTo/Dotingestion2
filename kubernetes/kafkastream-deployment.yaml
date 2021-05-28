@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+
+  labels:
+    service: kafkastream
+  name: kafkastream
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kafkastream
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: kafkastream
+    spec:
+      containers:
+        - image: dotingestion2:kafkastream
+          name: kafkastream
+          resources: {}
+      restartPolicy: Always
+status: {}

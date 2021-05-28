@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: elasticsearch
+  name: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: elasticsearch
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: elasticsearch
+    spec:
+      hostname: elasticsearch
+      containers:
+        - env:
+            - name: ES_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+            - name: cluster.initial_master_nodes
+              value: elasticsearch
+            - name: cluster.name
+              value: elasticsearch-docker-cluster
+            - name: discovery.seed_hosts
+              value: elasticsearch
+            - name: node.name
+              value: elasticsearch
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+          name: elasticsearch
+          ports:
+            - containerPort: 9200
+          resources: {}
+      restartPolicy: Always
+status: {}

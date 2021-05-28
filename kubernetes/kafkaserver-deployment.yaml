@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: kafkaserver
+  name: kafkaserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kafkaserver
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: kafkaserver
+    spec:
+      hostname: kafkaserver
+      containers:
+        - env:
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT://kafkaserver:9092
+            - name: KAFKA_BROKER_ID
+              value: "0"
+            - name: KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_DEFAULT_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_MESSAGE_MAX_BYTES
+              value: "1677722"
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+          image: confluentinc/cp-kafka:6.1.1
+          name: kafkaserver
+          ports:
+            - containerPort: 9092
+          resources: {}
+      restartPolicy: Always
+status: {}

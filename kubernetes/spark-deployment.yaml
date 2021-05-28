@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: spark
+  name: spark
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: spark
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: spark
+    spec:
+      containers:
+        - image: dotingestion2:spark
+          name: spark
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: kafkaproducer
+  name: kafkaproducer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kafkaproducer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: kafkaproducer
+    spec:
+      containers:
+        - image: dotingestion2:ingestion
+          name: kafkaproducer
+          resources: {}
+      restartPolicy: Always
+status: {}

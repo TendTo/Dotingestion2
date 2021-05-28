@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: webui
+  name: webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: webui
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: webui
+    spec:
+      containers:
+        - env:
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+              value: kafkaServer:9092
+            - name: KAFKA_CLUSTERS_0_NAME
+              value: my_cluster
+            - name: KAFKA_CLUSTERS_0_ZOOKEEPER
+              value: zookeeper:2181
+          image: provectuslabs/kafka-ui:latest
+          name: kafkawebui
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}

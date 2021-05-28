@@ -1,0 +1,432 @@
+# Cassandra - database
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: cassandra
+  name: cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: cassandra
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: cassandra
+    spec:
+      hostname: cassandra
+      containers:
+        - env:
+            - name: CASSANDRA_BROADCAST_ADDRESS
+              value: cassandra
+            - name: CASSANDRA_KEYSPACE
+              value: dota_ks
+            - name: CASSANDRA_MATCH_TABLE
+              value: matches
+          image: dotingestion2:cassandra
+          name: cassandra
+          ports:
+            - containerPort: 9042
+          resources: {}
+      restartPolicy: Always
+---
+# Cassandra - NodePort service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: cassandra
+  name: cassandra
+spec:
+  type: NodePort
+  ports:
+    - name: "9042"
+      port: 9042
+      targetPort: 9042
+      nodePort: 30001
+  selector:
+    service: cassandra
+---
+# kafkaserver - messaging
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: kafkaserver
+  name: kafkaserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kafkaserver
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: kafkaserver
+    spec:
+      hostname: kafkaserver
+      containers:
+        - env:
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT://kafkaserver:9092
+            - name: KAFKA_BROKER_ID
+              value: "0"
+            - name: KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_DEFAULT_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_MESSAGE_MAX_BYTES
+              value: "1677722"
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+          image: confluentinc/cp-kafka:6.1.1
+          name: kafkaserver
+          ports:
+            - containerPort: 9092
+          resources: {}
+      restartPolicy: Always
+---
+# kafkaserver - ClusterIP service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: kafkaserver
+  name: kafkaserver
+spec:
+  ports:
+    - name: "9092"
+      port: 9092
+      targetPort: 9092
+  selector:
+    service: kafkaserver
+status:
+  loadBalancer: {}
+---
+# kafkaproducer - producer
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: kafkaproducer
+  name: kafkaproducer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kafkaproducer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: kafkaproducer
+    spec:
+      containers:
+        - image: dotingestion2:ingestion
+          name: kafkaproducer
+          resources: {}
+      restartPolicy: Always
+---
+# webui - visualization
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: webui
+  name: webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: webui
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: webui
+    spec:
+      containers:
+        - env:
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+              value: kafkaServer:9092
+            - name: KAFKA_CLUSTERS_0_NAME
+              value: my_cluster
+            - name: KAFKA_CLUSTERS_0_ZOOKEEPER
+              value: zookeeper:2181
+          image: provectuslabs/kafka-ui:latest
+          name: kafkawebui
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+---
+# webui - NodePort service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: webui
+  name: webui
+spec:
+  type: NodePort
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000
+  selector:
+    service: webui
+---
+# zookeeper - orchestration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: zookeeper
+  name: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: zookeeper
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: zookeeper
+    spec:
+      hostname: zookeeper
+      containers:
+        - env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: "2181"
+            - name: ZOOKEEPER_SERVER_ID
+              value: "1"
+          image: confluentinc/cp-zookeeper:6.1.1
+          name: zookeeper
+          ports:
+            - containerPort: 2181
+          resources: {}
+      restartPolicy: Always
+---
+# zookeeper - ClusterIP service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: zookeeper
+  name: zookeeper
+spec:
+  ports:
+    - name: "2181"
+      port: 2181
+      targetPort: 2181
+  selector:
+    service: zookeeper
+status:
+  loadBalancer: {}
+---
+# connect-cassandra - kafka connect
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: connect-cassandra
+  name: connect-cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: connect-cassandra
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: connect-cassandra
+    spec:
+      containers:
+        - image: dotingestion2:kafka-connect-cassandra
+          name: connect-cassandra
+          resources: {}
+      restartPolicy: Always
+---
+# kafkastream - kafka streaming
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: kafkastream
+  name: kafkastream
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kafkastream
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: kafkastream
+    spec:
+      containers:
+        - image: dotingestion2:kafkastream
+          name: kafkastream
+          resources: {}
+      restartPolicy: Always
+---
+# elasticsearch - database
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: elasticsearch
+  name: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: elasticsearch
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: elasticsearch
+    spec:
+      hostname: elasticsearch
+      containers:
+        - env:
+            - name: ES_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+            - name: cluster.initial_master_nodes
+              value: elasticsearch
+            - name: cluster.name
+              value: elasticsearch-docker-cluster
+            - name: discovery.seed_hosts
+              value: elasticsearch
+            - name: node.name
+              value: elasticsearch
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+          name: elasticsearch
+          ports:
+            - containerPort: 9200
+          resources: {}
+      restartPolicy: Always
+---
+# elasticsearch - ClusterIP service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: elasticsearch
+  name: elasticsearch
+spec:
+  ports:
+    - name: "9200"
+      port: 9200
+      targetPort: 9200
+  selector:
+    service: elasticsearch
+status:
+  loadBalancer: {}
+---
+# connect-elasticsearch - kafka connect
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: connect-elasticsearch
+  name: connect-elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: connect-elasticsearch
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: connect-elasticsearch
+    spec:
+      containers:
+        - image: dotingestion2:kafka-connect-elasticsearch
+          name: connect-elasticsearch
+          resources: {}
+      restartPolicy: Always
+---
+# kibana - visualization
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: kibana
+  name: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kibana
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: kibana
+    spec:
+      containers:
+        - image: docker.elastic.co/kibana/kibana:7.12.1
+          name: kibana
+          ports:
+            - containerPort: 5601
+          resources: {}
+      restartPolicy: Always
+---
+# kibana - NodePort service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: kibana
+  name: kibana
+spec:
+  type: NodePort
+  ports:
+    - name: "5601"
+      port: 5601
+      targetPort: 5601
+      nodePort: 30002
+  selector:
+    service: kibana
+status:
+  loadBalancer: {}
+---
+# spark - data processing
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: spark
+  name: spark
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: spark
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: spark
+    spec:
+      containers:
+        - image: dotingestion2:spark
+          name: spark
+          resources: {}
+      restartPolicy: Always
