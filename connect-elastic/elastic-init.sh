@@ -14,4 +14,4 @@
 #   sleep 10
 # done
 
-exec /bin/connect-standalone /etc/kafka/connect-standalone.properties /etc/kafka/elsaticsearch-sink.properties
+exec /bin/connect-standalone /etc/kafka/connect-standalone.properties /etc/kafka/elasticsearch-sink.properties
