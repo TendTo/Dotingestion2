@@ -3,7 +3,8 @@ services:
     cassandra:
         build: 
             context: cassandra
-        image: init-cassandra
+        image: dotingestion2:cassandra
+        container_name: cassandra
         environment: 
             - CASSANDRA_BROADCAST_ADDRESS=cassandra
             - CASSANDRA_KEYSPACE=dota_ks
@@ -56,7 +57,7 @@ services:
     connect-cassandra:
         build: 
             context: connect-cassandra
-        image: custom-kafka-connect:6.1.1
+        image: dotingestion2:kafka-connect-cassandra
         container_name: connect-cassandra
         depends_on:
           - kafkaserver
@@ -65,7 +66,7 @@ services:
     connect-elasticsearch:
         build: 
             context: connect-elastic
-        image: custom-kafka-connect-elasticsearch:6.1.1
+        image: dotingestion2:kafka-connect-elasticsearch
         container_name: connect-elasticsearch
         depends_on:
           - kafkaserver
@@ -74,17 +75,17 @@ services:
     kafkastream:
         build: 
             context: stream
-        image: dota:stream
+        image: dotingestion2:kafkastream
         container_name: kafkastream
         depends_on: 
             - kafkaserver
-  
+            - kadkaproducer
+
     kafkaproducer:
         build: 
             context: ingestion
-        image: dota:ingestion
-        container_name: kafkaProducer
-        command: python3 fake.py
+        image: dotingestion2:ingestion
+        container_name: kafkaproducer
         depends_on: 
             - kafkaserver
 
@@ -103,11 +104,12 @@ services:
     spark:
         build: 
             context: spark
-        image: dota:spark
+        image: dotingestion2:spark
         container_name: spark
-        entrypoint: ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.1",  "--master", "local[2]", "opt/spark/python/test.py"]
         depends_on: 
             - kafkaserver
+            - elasticsearch
+            - connect-elasticsearch
 
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
