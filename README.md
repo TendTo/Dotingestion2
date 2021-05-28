@@ -1,6 +1,6 @@
 # Dotingestion 2: there is no Dotingestion 1
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TendTo/Dotingestion2/master?filepath=docs%2FDotingestion2.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TendTo/Dotingestion2/docs?filepath=Dotingestion2.ipynb)
 
 ## Project structure
 ```py
@@ -22,7 +22,7 @@
 ```
 
 ## Brief description
-- This is a project created for the subject _Technologies for Advanced Programming_ or _TAP_ at the _univeristy of Catania_ or _UniCT_.
+- This is a project created for the subject _Technologies for Advanced Programming_ or _TAP_ at the _university of Catania_ or _UniCT_.
 - The idea is to showcase a simple ETL pipeline using some of the most widely known technologies in the big data fields.
 - The main inspiration for this project was the [OpenDota project](https://www.opendota.com/), more specifically the _"core"_ part which is [opensource](https://github.com/odota/core).
 - Raw data comes from the WebAPI provided by _Steam_ (Valve).
