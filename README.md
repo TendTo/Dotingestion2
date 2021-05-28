@@ -1,26 +1,29 @@
 # Dotingestion 2: there is no Dotingestion 1
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TendTo/Dotingestion2/master?filepath=docs%2FDotingestion2.ipynb)
+
 ## Project structure
 ```py
 .
-├── api                     # Rest api associated with the data (Springboot)
+├── api                     # Rest API associated with the data (Springboot)
 ├── cassandra               # Cassandra Dockerfile and init script (Cassandra)
 ├── connect-cassandra       # Kafka-Cassandra sink Dockerfile and configurations (Kafka Connect + Cassandra)
 ├── connect-elastic         # Kafka-Elasticsearch sink Dockerfile and configurations (Kafka Connect + Elasticsearch)
 ├── docs                    # Documentation files and notebooks
 ├── ingestion               # Data ingestion (python script + Kafka)
+├── kubernetes              # Kubernetes configuration files (Kubernetes)
 ├── spark                   # Spark Dockerfile and python scripts (Spark + python script)
 ├── stream                  # Kafka stream application to filter and enrich the input data (Kafka Streaming)
 ├── .gitattribute           # .gitattribute file
 ├── .gitignore              # .gitignore file
-├── docker-compose.yaml     # Base docker compose file. Starts all the applications
+├── docker-compose.yaml     # Base docker-compose file. Starts all the applications
 ├── LICENSE                 # Licence of the project
 └── README.md               # This file
 ```
 
 ## Brief description
 - This is a project created for the subject _Technologies for Advanced Programming_ or _TAP_ at the _univeristy of Catania_ or _UniCT_.
-- The idea is to showcase a simple ETL pipeline using some of the most widly known technologies in the big data fileds.
+- The idea is to showcase a simple ETL pipeline using some of the most widely known technologies in the big data fields.
 - The main inspiration for this project was the [OpenDota project](https://www.opendota.com/), more specifically the _"core"_ part which is [opensource](https://github.com/odota/core).
 - Raw data comes from the WebAPI provided by _Steam_ (Valve).
 
@@ -60,11 +63,11 @@
 - Make sure you are in the root directory, with the _docker-compose.yaml_ file
 - Create an _ingestion/settings.yaml_ file with the following values (see _ingestion/settings.yaml.example_)
   ```yaml
-  # You need this in order to access the Steam Web API, which is used to fetch basic match data. You can safely use your main account to obtain the API key. You can request an API key here: https://steamcommunity.com/dev/apikey
+  # You need this to access the Steam Web API, which is used to fetch basic match data. You can safely use your main account to obtain the API key. You can request an API key here: https://steamcommunity.com/dev/apikey
   api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-  # Steam Web API endpoint. You should not modify this, unless you know what you are doing
+  # Steam Web API endpoint. You should not modify this unless you know what you are doing
   api_endpoint: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
-  # Kafka topic the producer will send the data to. The kafka streams consumer expects this topic
+  # Kafka topic the producer will send the data to. The Kafka streams consumer expects this topic
   topic: dota_raw
   # 3 possible settings can be placed here:
   # - The sequential match id of the first match you want to fetch
@@ -96,11 +99,11 @@
 - Make sure you are in the root directory, with the _all-in-one-deploy.yaml_ file
 - Create an _ingestion/settings.yaml_ file with the following values (see _ingestion/settings.yaml.example_)
   ```yaml
-  # You need this in order to access the Steam Web API, which is used to fetch basic match data. You can safely use your main account to obtain the API key. You can request an API key here: https://steamcommunity.com/dev/apikey
+  # You need this to access the Steam Web API, which is used to fetch basic match data. You can safely use your main account to obtain the API key. You can request an API key here: https://steamcommunity.com/dev/apikey
   api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-  # Steam Web API endpoint. You should not modify this, unless you know what you are doing
+  # Steam Web API endpoint. You should not modify this unless you know what you are doing
   api_endpoint: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
-  # Kafka topic the producer will send the data to. The kafka streams consumer expects this topic
+  # Kafka topic the producer will send the data to. The Kafka streams consumer expects this topic
   topic: dota_raw
   # 3 possible settings can be placed here:
   # - The sequential match id of the first match you want to fetch
@@ -124,7 +127,7 @@
 - `docker exec -it <container-name> bash` Get a terminal into the running container
 - `docker system prune` Cleans your system of any stopped containers, images, and volumes
 - `docker-compose build` Rebuilds your containers (e.g. for database schema updates)
-- `kubectl -n default rollout restart deploy` Restart all kubernetes pods
+- `kubectl -n default rollout restart deploy` Restart all Kubernetes pods
 
 ## Resources
 - [OpenDota](https://www.opendota.com/)
