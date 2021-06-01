@@ -16,6 +16,7 @@ WORKDIR ${SPARK_HOME}
 COPY ./data .
 COPY ./python .
 COPY ./model ./model
+COPY ./cv_model ./cv_model
 COPY ./conf/log4j.properties ./conf
 
 # Run commands

@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorSizeHint","timestamp":1622506743584,"sparkVersion":"3.1.1","uid":"VectorSizeHint_b0f25d14b224","paramMap":{"inputCol":"radiant_lineup_vec","handleInvalid":"skip","size":121},"defaultParamMap":{"handleInvalid":"error"}}

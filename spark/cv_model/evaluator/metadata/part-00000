@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.evaluation.BinaryClassificationEvaluator","timestamp":1622506742577,"sparkVersion":"3.1.1","uid":"BinaryClassificationEvaluator_2f21ff351961","paramMap":{"labelCol":"radiant_win_int"},"defaultParamMap":{"labelCol":"label","numBins":1000,"rawPredictionCol":"rawPrediction","metricName":"areaUnderROC"}}

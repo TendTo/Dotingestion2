@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1622506743675,"sparkVersion":"3.1.1","uid":"VectorAssembler_32f02c5f29a1","paramMap":{"outputCol":"features","inputCols":["dire_lineup_vec","radiant_lineup_vec"]},"defaultParamMap":{"outputCol":"VectorAssembler_32f02c5f29a1__output","handleInvalid":"error"}}
