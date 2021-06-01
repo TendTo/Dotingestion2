@@ -1,4 +1,4 @@
-"""Dotingestion2 - Create a dataset to train the model"""
+"""Dotingestion2 - Create a dataset to train the model. Saves it to a csv file"""
 from time import sleep
 import logging
 import yaml
