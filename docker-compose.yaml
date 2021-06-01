@@ -39,21 +39,6 @@ services:
           KAFKA_DEFAULT_REPLICATION_FACTOR: 1
           KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR: 1
 
-    kafkaworker1:
-        image: confluentinc/cp-kafka:6.1.1
-        container_name: kafkaworker1
-        depends_on:
-          - kafkaserver
-        environment:
-          KAFKA_BROKER_ID: 1
-          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkaworker1:9092
-          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
-          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 2
-          KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 2
-          KAFKA_DEFAULT_REPLICATION_FACTOR: 2
-          KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR: 2
-
     connect-cassandra:
         build: 
             context: connect-cassandra
