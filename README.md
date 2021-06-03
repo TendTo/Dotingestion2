@@ -50,7 +50,7 @@
 | 5 | dota_single | Kafka - Elasticsearch |
 | 6 | dota_lineup | Kafka - Spark |
 
-## Quickstart (Docker)
+## Quickstart local (Docker)
 
 ### System requirements
 - [Docker](https://www.docker.com/get-started)
@@ -58,7 +58,6 @@
 
 ### Steps
 - To run the Elasticsearch container you may need to tweak the *vm.max_map_count* variable. See [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
-- Download [spark-3.1.1-bin-hadoop2.7.tgz](https://www.apache.org/dyn/closer.lua/spark/spark-3.1.1/spark-3.1.1-bin-hadoop2.7.tgz) and place it in the _spark/setup_ directory
 - Download [DataStax Apache Kafka® Connector](https://downloads.datastax.com/#akc) and place it in the _connect-cassandra_ directory
 - Make sure you are in the root directory, with the _docker-compose.yaml_ file
 - Create an _ingestion/settings.yaml_ file with the following values (see _ingestion/settings.yaml.example_)
@@ -86,7 +85,7 @@
   docker-compose down
   ```
 
-## Quickstart (Kubernetes)
+## Quickstart local (Kubernetes)
 
 ### System requirements
 - [Docker](https://www.docker.com/get-started)
@@ -94,7 +93,6 @@
 
 ### Steps
 - To run the Elasticsearch container you may need to tweak the *vm.max_map_count* variable. See [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
-- Download [spark-3.1.1-bin-hadoop2.7.tgz](https://www.apache.org/dyn/closer.lua/spark/spark-3.1.1/spark-3.1.1-bin-hadoop2.7.tgz) and place it in the _spark/setup_ directory
 - Download [DataStax Apache Kafka® Connector](https://downloads.datastax.com/#akc) and place it in the _connect-cassandra_ directory
 - Make sure you are in the root directory, with the _all-in-one-deploy.yaml_ file
 - Create an _ingestion/settings.yaml_ file with the following values (see _ingestion/settings.yaml.example_)

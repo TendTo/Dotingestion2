@@ -1,17 +1,8 @@
-FROM openjdk:8-jre
+FROM jupyter/pyspark-notebook:spark-3.1.1
 
-ENV SPARK_HOME=/opt/spark
-ENV SPARK_VERSION=3.1.1
-ENV PATH $PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+RUN pip3 install pyspark kafka-utils numpy
 
-RUN apt-get update &&\
-    apt-get -y install python3 python3-pip &&\
-    pip3 install pyspark kafka-utils numpy
-
-ADD setup/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz /opt
-RUN mv /opt/spark-${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_HOME}
-
-WORKDIR ${SPARK_HOME}
+WORKDIR /app
 
 COPY ./data .
 COPY ./python .
