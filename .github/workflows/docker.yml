@@ -27,7 +27,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker images
+      - name: Setup kafka-connect-cassandra-sink
+        run: curl https://downloads.datastax.com/kafka/kafka-connect-cassandra-sink-1.4.0.tar.gz -o ./connect-cassandra/setup/kafka-connect-cassandra-sink-1.4.0.tar.gz
+
+      - name: Docker kafka-connect-cassandra image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./connect-cassandra
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:kafka-connect-cassandra
+
+      - name: Docker spark image
         uses: docker/build-push-action@v2.5.0
         with:
           # Build's context is the set of files located in the specified PATH or URL
@@ -36,3 +49,43 @@ jobs:
           push: true
           # Tag to assign the image
           tags: tendto/dotingestion2:spark
+
+      - name: Docker kafka-connect-elastic image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./connect-elastic
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:kafka-connect-elastic
+
+      - name: Docker cassandra image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./cassandra
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:cassandra
+
+      - name: Docker ingestion image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./ingestion
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:ingestion
+
+      - name: Docker kafkastream image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./stream
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:kafkastream
