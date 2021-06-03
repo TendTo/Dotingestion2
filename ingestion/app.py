@@ -1,4 +1,5 @@
 """Dotingestion2 - Kafka producer"""
+import os
 import logging
 import yaml
 import requests
@@ -12,16 +13,30 @@ logger = logging.getLogger(__name__)
 
 # Global variable that holds the match_seq_num to use in the API request
 match_seq_num = None
+config = {}
 
 # Read the configuration file
-with open("settings.yaml", 'r', encoding='utf-8') as f:
-    config = yaml.safe_load(f)
+if os.path.exists("settings.yaml"):
+    with open("settings.yaml", 'r', encoding='utf-8') as f:
+        config = yaml.safe_load(f)
+
+# Override with the environment settings
+if os.getenv('MATCH_SEQ_NUM', None):
+    config['match_seq_num'] = os.getenv('MATCH_SEQ_NUM')
+if os.getenv('API_KEY', None):
+    config['api_key'] = os.getenv('API_KEY')
+if os.getenv('API_ENDPOINT', None):
+    config['api_endpoint'] = os.getenv('API_ENDPOINT')
+if os.getenv('TOPIC', None):
+    config['topic'] = os.getenv('TOPIC')
+if os.getenv('HISTORY_ENDPOINT', None):
+    config['history_endpoint'] = os.getenv('HISTORY_ENDPOINT')
 
 
 # Initialize the match_seq_num variable, depending on the value found in the configuration file
 def get_match_seq_num(config: dict):
     if config['match_seq_num'] is None or config['match_seq_num'] == "steam":
-        result = requests.get(config['hystory_endpoint'].format(config['api_key'])).json()
+        result = requests.get(config['history_endpoint'].format(config['api_key'])).json()
         res = result.get('result', None)
         matches = res.get('matches', None) if res is not None else None
         if matches:
@@ -33,8 +48,8 @@ def get_match_seq_num(config: dict):
         rows = session.execute('SELECT MAX(match_seq_num) FROM matches LIMIT 1')
         for row in rows:
             return row[0]
-    elif isinstance(config['match_seq_num'], int):
-        return config['match_seq_num']
+    elif config['match_seq_num'].isnumeric():
+        return int(config['match_seq_num'])
 
     raise TypeError("match_seq_num must be either 'cassandra', 'steam', null or a integer")
 
@@ -55,7 +70,7 @@ def confluent_producer():
         matches = res.get('matches', None) if res is not None else None
         if matches:
             producer = Producer({'bootstrap.servers': 'kafkaserver:9092', 'message.max.bytes': 1677722})
-            producer.produce("dota_raw", result.text, callback=delivery_report)
+            producer.produce(config['topic'], result.text, callback=delivery_report)
             producer.flush()
             match_seq_num = matches[-1]['match_seq_num'] + 1
             logger.info("Flush completed. New match_seq_num: %d", match_seq_num)

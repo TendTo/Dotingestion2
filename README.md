@@ -71,11 +71,12 @@
   # 3 possible settings can be placed here:
   # - The sequential match id of the first match you want to fetch
   # - 'cassandra', will fetch the last sequential match id in the cassandra database
-  # - 'steam', will fetch the most recent sequential match id from the "hystory_endpoint"
+  # - 'steam', will fetch the most recent sequential match id from the "history_endpoint"
   match_seq_num: 4976549000 | 'steam' | 'cassandra'
   # Steam API Web endpoint used when 'steam' value is placed in "match_seq_num"
-  hystory_endpoint: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/key={}&matches_requested=1
+  history_endpoint: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/key={}&matches_requested=1
   ```
+  All the values present in the settings file can be overwritten by any environment variable whit the same name in all caps
 - Start:
   ```bash
   docker-compose up
@@ -106,11 +107,12 @@
   # 3 possible settings can be placed here:
   # - The sequential match id of the first match you want to fetch
   # - 'cassandra', will fetch the last sequential match id in the cassandra database
-  # - 'steam', will fetch the most recent sequential match id from the "hystory_endpoint"
+  # - 'steam', will fetch the most recent sequential match id from the "history_endpoint"
   match_seq_num: 4976549000 | 'steam' | 'cassandra'
   # Steam API Web endpoint used when 'steam' value is placed in "match_seq_num"
-  hystory_endpoint: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/key={}&matches_requested=1
+  history_endpoint: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/key={}&matches_requested=1
   ```
+  All the values present in the settings file can be overwritten by any environment variable whit the same name in all caps
 - Build all the Docker containers with the _dotingestion_ tag. Can be done rapidly through the docker-compose file
 - Start:
   ```bash
