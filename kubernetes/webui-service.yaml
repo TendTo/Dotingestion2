@@ -5,11 +5,8 @@ metadata:
     service: webui
   name: webui
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
-      nodePort: 30000
+  - port: 8080
   selector:
     service: webui

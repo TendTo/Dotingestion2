@@ -24,8 +24,9 @@ spec:
               value: dota_ks
             - name: CASSANDRA_MATCH_TABLE
               value: matches
-          image: dotingestion2:cassandra
+          image: tendto/dotingestion2:cassandra
           name: cassandra
+          imagePullPolicy: Always
           ports:
             - containerPort: 9042
           resources: {}

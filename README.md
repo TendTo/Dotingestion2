@@ -94,26 +94,8 @@
 
 ### Steps
 - To run the Elasticsearch container you may need to tweak the *vm.max_map_count* variable. See [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
-- Download [DataStax Apache Kafka® Connector](https://downloads.datastax.com/#akc) and place it in the _connect-cassandra_ directory
 - Make sure you are in the root directory, with the _all-in-one-deploy.yaml_ file
-- Create an _ingestion/settings.yaml_ file with the following values (see _ingestion/settings.yaml.example_)
-  ```yaml
-  # You need this to access the Steam Web API, which is used to fetch basic match data. You can safely use your main account to obtain the API key. You can request an API key here: https://steamcommunity.com/dev/apikey
-  api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-  # Steam Web API endpoint. You should not modify this unless you know what you are doing
-  api_endpoint: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
-  # Kafka topic the producer will send the data to. The Kafka streams consumer expects this topic
-  topic: dota_raw
-  # 3 possible settings can be placed here:
-  # - The sequential match id of the first match you want to fetch
-  # - 'cassandra', will fetch the last sequential match id in the cassandra database
-  # - 'steam', will fetch the most recent sequential match id from the "history_endpoint"
-  match_seq_num: 4976549000 | 'steam' | 'cassandra'
-  # Steam API Web endpoint used when 'steam' value is placed in "match_seq_num"
-  history_endpoint: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/key={}&matches_requested=1
-  ```
-  All the values present in the settings file can be overwritten by any environment variable whit the same name in all caps
-- Build all the Docker containers with the _dotingestion_ tag. Can be done rapidly through the docker-compose file
+- Make sure to edit the _kubernetes/kafkaproducer-key.yaml_ file to add your [Steam Web API key](https://steamcommunity.com/dev/apikey). All the settings shown above will be determined by the environment variable whit the same name in all caps
 - Start:
   ```bash
   kubectl apply -f all-in-one-deploy.yaml

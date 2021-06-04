@@ -16,7 +16,7 @@ spec:
         service: connect-elasticsearch
     spec:
       containers:
-        - image: dotingestion2:kafka-connect-elasticsearch
+        - image: tendto/dotingestion2:kafka-connect-elasticsearch
           name: connect-elasticsearch
           resources: {}
       restartPolicy: Always

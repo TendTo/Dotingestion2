@@ -5,11 +5,8 @@ metadata:
     service: cassandra
   name: cassandra
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - name: "9042"
-      port: 9042
-      targetPort: 9042
-      nodePort: 30001
+  - port: 9042
   selector:
     service: cassandra

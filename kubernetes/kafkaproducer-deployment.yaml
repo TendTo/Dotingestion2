@@ -16,8 +16,23 @@ spec:
         service: kafkaproducer
     spec:
       containers:
-        - image: dotingestion2:ingestion
+        - env:
+            - name: API_ENDPOINT
+              value: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
+            - name: TOPIC
+              value: dota_raw
+            - name: MATCH_SEQ_NUM
+              value: "5027413827"
+            - name: HISTORY_ENDPOINT
+              value: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key={}&matches_requested=1
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-key
+                  key: key
+          image: tendto/dotingestion2:ingestion
           name: kafkaproducer
+          imagePullPolicy: Always
           resources: {}
       restartPolicy: Always
 status: {}

@@ -17,8 +17,9 @@ spec:
         service: kafkastream
     spec:
       containers:
-        - image: dotingestion2:kafkastream
+        - image: tendto/dotingestion2:kafkastream
           name: kafkastream
+          imagePullPolicy: Always
           resources: {}
       restartPolicy: Always
 status: {}

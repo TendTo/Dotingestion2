@@ -16,8 +16,9 @@ spec:
         service: connect-cassandra
     spec:
       containers:
-        - image: dotingestion2:kafka-connect-cassandra
+        - image: tendto/dotingestion2:kafka-connect-cassandra
           name: connect-cassandra
+          imagePullPolicy: Always
           resources: {}
       restartPolicy: Always
 status: {}

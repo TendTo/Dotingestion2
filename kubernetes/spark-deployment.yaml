@@ -16,8 +16,9 @@ spec:
         service: spark
     spec:
       containers:
-        - image: dotingestion2:spark
+        - image: tendto/dotingestion2:spark
           name: spark
+          imagePullPolicy: Always
           resources: {}
       restartPolicy: Always
 status: {}
