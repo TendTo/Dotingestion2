@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  div.lineups
+
+    div.card.text-white.bg-success.mb-3
+      div.card.header
+        h4 Radiant lineup
+      div.card-body
+        div.lineup
+          for radiant in prediction.radiantLineup
+            div.card.text-white.bg-primary.mb-3
+              div.card.header #{heroes.get(radiant).localized_name}
+              div.card-body
+                img.hero-img(src="https://steamcdn-a.akamaihd.net/apps/dota2/images/heroes/" + heroes.get(radiant).name.substr(14) + "_full.png", alt=heroes.get(radiant).localized_name)
+
+    div.card.text-white.bg-danger.mb-3
+      div.card.header
+        h4 Dire lineup
+      div.card-body
+        div.lineup
+          for dire in prediction.direLineup
+            div.card.text-white.bg-primary.mb-3
+              div.card.header #{heroes.get(dire).localized_name}
+              div.card-body
+                img.hero-img(src="https://steamcdn-a.akamaihd.net/apps/dota2/images/heroes/" + heroes.get(dire).name.substr(14) + "_full.png", alt=heroes.get(dire).localized_name)
+
+    div
+      h4 Prediction 
+
+      div.list
+        h5(class=prediction.radiant_win_prediction ? "text-success" : "text-danger") Probability #{prediction.radiant_win_prediction ? prediction.probability[1].toFixed(2) : prediction.probability[0].toFixed(2) }
+        h5(class=prediction.radiant_win_prediction ? "text-success" : "text-danger") #{prediction.radiant_win_prediction ? "Radiant win" : "Dire win"}
+
+  script(src="/javascripts/response.js") 

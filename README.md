@@ -5,7 +5,7 @@
 ## Project structure
 ```py
 .
-├── api                     # Rest API associated with the data (Springboot)
+├── api                     # Rest API associated with the data (ExpressJS)
 ├── cassandra               # Cassandra Dockerfile and init script (Cassandra)
 ├── connect-cassandra       # Kafka-Cassandra sink Dockerfile and configurations (Kafka Connect + Cassandra)
 ├── connect-elastic         # Kafka-Elasticsearch sink Dockerfile and configurations (Kafka Connect + Elasticsearch)
@@ -120,3 +120,4 @@
 - [I used deep learning to predict DotA 2](https://www.reddit.com/r/DotA2/comments/gf1zgx/i_used_deep_learning_to_predict_dota_2_win/)
 - [Elasticsearch: Using Docker images in production](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-prod-prerequisites)
 - [Elasticsearch Service Sink Connector for Confluent Platform](https://docs.confluent.io/kafka-connect-elasticsearch/current/index.html)
+- [How to start multiple streaming queries in a single Spark application?](https://stackoverflow.com/questions/52762405/how-to-start-multiple-streaming-queries-in-a-single-spark-application)

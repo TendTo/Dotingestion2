@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  form.lineups(action="/" method="POST")
+
+    div.card.text-white.bg-success.mb-3
+      div.card.header
+        h4 Select the Radiant lineup
+      div.card-body
+        div.lineup
+          for code in ['r0', 'r1', 'r2', 'r3', 'r4']
+            select.form-select.lineup-select(name=code required)
+              option(value="" selected=true hidden)
+              for hero in heroes
+                option(value=hero.id selected=(prediction && prediction[code] == hero.id ? true : false)) #{hero.localized_name}
+
+    div.card.text-white.bg-danger.mb-3
+      div.card.header
+        h4 Dire lineup
+      div.card-body
+        div.lineup
+          for code in ['d0', 'd1', 'd2', 'd3', 'd4']
+            select.form-select.lineup-select(name=code required)
+              option(value="" selected hidden)
+              for hero in heroes
+                option(value=hero.id selected=(prediction && prediction[code] == hero.id ? true : false)) #{hero.localized_name}
+
+    div.submit-container
+      input.btn.btn-primary(type="submit" value="Submit")
+
+  script(src="/javascripts/index.js")
+
+  if prediction
+    script alert("Request submitted. Try again later")

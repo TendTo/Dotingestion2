@@ -3,6 +3,7 @@ services:
     cassandra:
         build: 
             context: cassandra
+        hostname: cassandra
         image: dotingestion2:cassandra
         container_name: cassandra
         environment: 
@@ -13,6 +14,7 @@ services:
             - "9042:9042"
 
     zookeeper:
+        hostname: zookeeper
         image: confluentinc/cp-zookeeper:6.1.1
         container_name: zookeeper
         ports:
@@ -22,6 +24,7 @@ services:
             ZOOKEEPER_SERVER_ID: "1"
 
     kafkaserver:
+        hostname: kafkaserver
         image: confluentinc/cp-kafka:6.1.1
         container_name: kafkaserver
         depends_on:
@@ -102,6 +105,7 @@ services:
             - connect-elasticsearch
 
     elasticsearch:
+        hostname: elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
         container_name: elasticsearch
         ports:
@@ -120,5 +124,17 @@ services:
         container_name: kibana
         ports:
             - "5601:5601"
+        depends_on: 
+            - kafkaserver
+
+    api:
+        build: 
+            context: api
+        image: dotingestion2:api
+        container_name: api
+        ports:
+            - "3000:3000"
+        environment: 
+            PORT: "3000"
         depends_on: 
             - kafkaserver
