@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: api
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: api
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: api
+    spec:
+      containers:
+        - env:
+            - name: PORT
+              value: "3000"
+          image: tendto/dotingestion2:api
+          name: api
+          ports:
+            - containerPort: 3000
+          resources: {}
+      restartPolicy: Always
+status: {}
