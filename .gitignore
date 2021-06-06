@@ -145,6 +145,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+node_modules/
+
 # Setup
 **/setup/*
 
