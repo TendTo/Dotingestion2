@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Setup kafka-connect-cassandra-sink
-        run: curl https://downloads.datastax.com/kafka/kafka-connect-cassandra-sink-1.4.0.tar.gz -o ./connect-cassandra/setup/kafka-connect-cassandra-sink-1.4.0.tar.gz
+        run: curl https://downloads.datastax.com/kafka/kafka-connect-cassandra-sink-1.4.0.tar.gz -o ./connect-cassandra/setup/kafka-connect-cassandra-sink-1.4.0.tar.gz && chmod +x ./connect-elastic/elastic-init.sh
 
       - name: Docker kafka-connect-cassandra image
         uses: docker/build-push-action@v2.5.0
@@ -64,7 +64,7 @@ jobs:
           # Whether to push the image
           push: true
           # Tag to assign the image
-          tags: tendto/dotingestion2:kafka-connect-elastic
+          tags: tendto/dotingestion2:kafka-connect-elasticsearch
 
       - name: Docker cassandra image
         uses: docker/build-push-action@v2.5.0
