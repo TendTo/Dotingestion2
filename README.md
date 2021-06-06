@@ -68,6 +68,8 @@
   api_endpoint: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
   # Kafka topic the producer will send the data to. The Kafka streams consumer expects this topic
   topic: dota_raw
+  # Interval between each data fetch by the python script
+  interval: 10
   # 3 possible settings can be placed here:
   # - The sequential match id of the first match you want to fetch
   # - 'cassandra', will fetch the last sequential match id in the cassandra database

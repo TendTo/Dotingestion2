@@ -67,7 +67,7 @@ services:
         container_name: kafkastream
         depends_on: 
             - kafkaserver
-            - kadkaproducer
+            - kafkaproducer
 
     kafkaproducer:
         build: 
@@ -79,6 +79,7 @@ services:
             TOPIC: dota_raw
             MATCH_SEQ_NUM: 5027413827
             HISTORY_ENDPOINT: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key={}&matches_requested=1
+            INTERVAL: "40"
         depends_on: 
             - kafkaserver
 
@@ -118,7 +119,7 @@ services:
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
         depends_on: 
             - kafkaserver
-        
+
     kibana:
         image: docker.elastic.co/kibana/kibana:7.12.1
         container_name: kibana

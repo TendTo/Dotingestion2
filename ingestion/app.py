@@ -31,6 +31,8 @@ if os.getenv('TOPIC', None):
     config['topic'] = os.getenv('TOPIC')
 if os.getenv('HISTORY_ENDPOINT', None):
     config['history_endpoint'] = os.getenv('HISTORY_ENDPOINT')
+if os.getenv('INTERVAL', None):
+    config['interval'] = int(os.getenv('INTERVAL', '10'))
 
 
 # Initialize the match_seq_num variable, depending on the value found in the configuration file
@@ -85,7 +87,7 @@ def main():
     global match_seq_num
     match_seq_num = get_match_seq_num(config)
     logger.info("Initialized match_seq_num: %d", match_seq_num)
-    schedule.every(10).seconds.do(confluent_producer)
+    schedule.every(config['interval']).seconds.do(confluent_producer)
     while True:
         schedule.run_pending()
         time.sleep(1)
