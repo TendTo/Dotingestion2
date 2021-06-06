@@ -17,12 +17,14 @@ spec:
     spec:
       containers:
         - env:
+            - name: INTERVAL
+              value: "30"
             - name: API_ENDPOINT
               value: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
             - name: TOPIC
               value: dota_raw
             - name: MATCH_SEQ_NUM
-              value: "5027413827"
+              value: steam
             - name: HISTORY_ENDPOINT
               value: https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key={}&matches_requested=1
             - name: API_KEY
