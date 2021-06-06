@@ -105,11 +105,19 @@
   kubectl delete -f all-in-one-deploy.yaml
   ```
 
-### Basic troubleshooting
+### Useful commands
 - `docker exec -it <container-name> bash` Get a terminal into the running container
 - `docker system prune` Cleans your system of any stopped containers, images, and volumes
 - `docker-compose build` Rebuilds your containers (e.g. for database schema updates)
 - `kubectl -n default rollout restart deploy` Restart all Kubernetes pods
+
+### TODO list
+- [ ] Add the much needed replay parsing to gather much more informations about each match.
+- [ ] Make a usable user interface to fetch the data.
+- [ ] Use cluster with more than one node for each of the distributed services.
+- [ ] Improve performances.
+- [ ] Use kubernetes at its fullest.
+- [ ] Use the recommanded security layers like passwords and cryptography.
 
 ## Resources
 - [OpenDota](https://www.opendota.com/)
