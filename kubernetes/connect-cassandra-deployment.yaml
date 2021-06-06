@@ -21,4 +21,5 @@ spec:
           imagePullPolicy: Always
           resources: {}
       restartPolicy: Always
+      imagePullPolicy: Always
 status: {}

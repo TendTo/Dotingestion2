@@ -15,9 +15,14 @@ spec:
       labels:
         service: connect-elasticsearch
     spec:
+      initContainers:
+        - name: check-elastic
+          image: busybox:1.28
+          command: ['sh', '-c', "until wget --tries=1 --timeout=5 --spider elasticsearch:9200; echo 'Elasticsearch not up'; do sleep 5; done"]
       containers:
         - image: tendto/dotingestion2:kafka-connect-elasticsearch
           name: connect-elasticsearch
           resources: {}
       restartPolicy: Always
+      imagePullPolicy: Always
 status: {}

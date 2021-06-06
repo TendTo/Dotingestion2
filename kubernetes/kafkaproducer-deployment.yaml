@@ -18,7 +18,7 @@ spec:
       containers:
         - env:
             - name: INTERVAL
-              value: "30"
+              value: "40"
             - name: API_ENDPOINT
               value: http://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?key={}&start_at_match_seq_num={}
             - name: TOPIC
