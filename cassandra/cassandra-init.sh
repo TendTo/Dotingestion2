@@ -38,7 +38,7 @@ if [[ ! -z "$CASSANDRA_KEYSPACE" && ! -z "$CASSANDRA_MATCH_TABLE"  && $1 = 'cass
     WITH CLUSTERING ORDER BY (match_seq_num DESC);"
   until echo $CQL | cqlsh; do
     echo "cqlsh: Cassandra is unavailable - retry later"
-    sleep 2
+    sleep 10
   done &
 fi
 
