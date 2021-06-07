@@ -41,14 +41,14 @@
 ## Pipeline
 ![pipeline](docs/img/Dotingestion2-Pipeline.svg)
 
-| Index | Kafka topic | From - To |
-| - | - | - |
-| 1 | dota_raw | Steam Web API - Kafka |
-| 2 | dota_raw | Kafka - Kafka Steaming |
-| 3 | dota_single - dota_lineup | Kafka Streaming - Kafka |
-| 4 | dota_single | Kafka - Cassandra |
-| 5 | dota_single | Kafka - Elasticsearch |
-| 6 | dota_lineup | Kafka - Spark |
+| Index | Service | From Kafka | To Kafka |
+| - | - | - | - |
+| 1 | Steam Web API | / | dota_raw |
+| 2 | Kafka Streaming | dota_raw | dota_single - dota_lineup |
+| 3 | Cassandra | dota_single | / |
+| 4 | Dotingestio2 API | dota_request | dota_response |
+| 5 | Spark | dota_lineup - dota_request | dota_response |
+| 6 | Elasticsearch | dota_single | / |
 
 ## Quickstart local (Docker)
 
