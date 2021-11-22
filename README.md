@@ -71,7 +71,7 @@
   # Interval between each data fetch by the python script
   interval: 10
   # 3 possible settings can be placed here:
-  # - The sequential match id of the first match you want to fetch
+  # - The sequential match id of the first match you want to fetch, as a string
   # - 'cassandra', will fetch the last sequential match id in the cassandra database
   # - 'steam', will fetch the most recent sequential match id from the "history_endpoint"
   match_seq_num: 4976549000 | 'steam' | 'cassandra'

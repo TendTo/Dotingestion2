@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.9
 ENV PATH /usr/src/app/bin:$PATH
 WORKDIR /app
 
