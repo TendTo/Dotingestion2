@@ -7,4 +7,8 @@ RUN confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:5
 COPY conf/* /etc/kafka
 COPY ./elastic-init.sh /etc
 
+USER root
+RUN chmod u+x /etc/elastic-init.sh
+USER appuser
+
 ENTRYPOINT ["/etc/elastic-init.sh"]
